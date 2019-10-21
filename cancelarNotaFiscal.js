@@ -1,18 +1,27 @@
 /*
-JSON request:
-{
-   "chave":"45150819652219000198550990000000011442380343",
-   "motivo":"Cancelamento por motivos administrativos.",
-   "ambiente":"1"
-}
+  * Para executar utilizando NodeJS (Necessário instalar jQuery e JSDom via npm install pacote_name --save)
+  * var jsdom = require('jsdom');
+  * $ = require('jquery')(new jsdom.JSDOM().window);
 */
 
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "https://webmaniabr.com/api/1/nfe/cancelar/",
-  "method": "PUT",
-  "headers": {
+/**
+  * Cancelar Nota Fiscal
+  *
+  * Atenção: Somente poderá ser cancelada uma NF-e cujo uso tenha sido previamente
+  * autorizado pelo Fisco e desde que não tenha ainda ocorrido o fato gerador, ou seja,
+  * ainda não tenha ocorrido a saída da mercadoria do estabelecimento. Atualmente o prazo
+  * máximo para cancelamento de uma NF-e é de 24 horas (1 dia), contado a partir da autorização
+  * de uso. Caso já tenha passado o prazo de 24 horas ou já tenha ocorrido a circulação da
+  * mercadoria, emita uma NF-e de devolução para anular a NF-e anterior.
+*/
+
+const json = JSON.stringify({
+  "chave": "00000000000000000000000000000000000000000000",
+  "motivo": "Cancelamento por motivos administrativos."
+})
+
+$.ajax({
+  headers: {
     "cache-control": "no-cache",
     "content-type": "application/json",
     "x-consumer-key": "SEU_CONSUMER_KEY",
@@ -20,10 +29,12 @@ var settings = {
     "x-access-token": "SEU_ACCESS_TOKEN",
     "x-access-token-secret": "SEU_ACCESS_TOKEN_SECRET"
   },
-  "processData": false,
-  "data": "{\"chave\":\"45150819652219000198550990000000011442380343\",\"motivo\":\"Cancelamento por motivos administrativos.\",\"ambiente\":\"1\"}"
-}
-
-$.ajax(settings).done(function (response) {
-  console.log(response);
-});
+  url: "https://webmaniabr.com/api/1/nfe/cancelar/",
+  method: "PUT",
+  dataType: 'json',
+  data: json
+}).done(function( data ) {
+  console.log(data)
+}).fail(function( error ){
+  console.log(error.responseJSON)
+})

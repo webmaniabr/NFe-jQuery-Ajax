@@ -4,16 +4,8 @@
   * $ = require('jquery')(new jsdom.JSDOM().window);
 */
 
-/**
-  * Informações da Carta de Correção
-  *
-  * A Carta de Correção Eletrônica (CC-e) é um evento legal e tem por objetivo
-  * corrigir algumas informações da NF-e que já foi emitida.
-*/
-
 const json = JSON.stringify({
-  "chave": "00000000000000000000000000000000000000000000",
-  "correcao": "O CFOP correto é 5.102 referente a revenda tributada no mesmo estado."
+  "chave": "00000000000000000000000000000000000000000000"
 })
 
 $.ajax({
@@ -25,10 +17,10 @@ $.ajax({
     "x-access-token": "SEU_ACCESS_TOKEN",
     "x-access-token-secret": "SEU_ACCESS_TOKEN_SECRET"
   },
-  url: "https://webmaniabr.com/api/1/nfe/cartacorrecao/",
-  method: "POST",
+  url: "https://webmaniabr.com/api/1/nfe/consulta/",
+  method: "GET",
   dataType: 'json',
-  data: json
+  data: JSON.parse(json)
 }).done(function( data ) {
   console.log(data)
 }).fail(function( error ){
